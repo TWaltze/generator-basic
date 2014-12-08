@@ -9,6 +9,7 @@
 	text-align: center;
 	text-decoration: none;
 
+	outline: none;
 	border: none;
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
@@ -21,7 +22,7 @@
 	-webkit-appearance: none;
 	-webkit-border-radius: 0;
 
-	.newColoredButton(@accent)
+	.newColoredButton(@accent);
 
 	&-size {
 		&--small {
@@ -29,7 +30,7 @@
 		}
 
 		&--medium {
-
+			font-size: 1.2rem;
 		}
 
 		&--large {
@@ -99,12 +100,12 @@
 	border-color: darken(@baseColor, 15%);
 
 	&:hover {
-		background: darken(@accent, 5%);
+		background: darken(@baseColor, 5%);
 	}
 
 	&:active,
 	&:disabled,
 	&.disabled {
-		background: darken(@accent, 10%);
+		background: darken(@baseColor, 10%);
 	}
 }
