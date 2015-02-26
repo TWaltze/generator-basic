@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: ['<%= config.app %>/js/**/*.js'],
-                tasks: ['jshint', 'jscs'],
+                tasks: ['jshint', 'jscs', 'newer:copy:build'],
                 options: {
                     livereload: true
                 }
@@ -32,12 +32,8 @@ module.exports = function (grunt) {
                 files: ['Gruntfile.js']
             },
             less: {
-                files: ['<%= config.app %>/styles/**/*.less'],
+                files: ['<%= config.app %>/styles/**/*.{less,css}'],
                 tasks: ['less:build', 'autoprefixer:build']
-            },
-            styles: {
-                files: ['<%= config.app %>/styles/**/*.css'],
-                tasks: ['newer:copy:styles', 'autoprefixer']
             },
             html: {
                 files: ['<%= config.app %>/**/*.html'],
@@ -51,7 +47,7 @@ module.exports = function (grunt) {
                     '<%= config.build %>/**/*.html',
                     '<%= config.build %>/styles/**/*.css',
                     '<%= config.build %>/js/**/*.js',
-                    '<%= config.build %>/images/**/*'
+                    '<%= config.build %>/img/**/*'
                 ]
             }
         },
@@ -192,11 +188,10 @@ module.exports = function (grunt) {
                     dest: '<%= config.build %>',
                     src: [
                         '*.{ico,png,txt}',
-                        'images/**/*.webp',
                         '**/*.html',
-                        '**/*.js',
                         'js/**/*.*',
-                        'styles/fonts/**/*.*'
+                        'styles/fonts/**/*.*',
+                        'img/**/*.{gif,jpeg,jpg,png}'
                     ]
                 }]
             }
@@ -210,7 +205,8 @@ module.exports = function (grunt) {
             ],
             dist: [
                 'less:dist',
-                'imagemin'
+                'imagemin',
+                'copy:dist'
             ]
         },
 
@@ -254,7 +250,6 @@ module.exports = function (grunt) {
         'clean:dist',
         'concurrent:dist',
         'autoprefixer',
-        'cssmin',
-        'copy:dist'
+        'cssmin'
     ]);
 };
