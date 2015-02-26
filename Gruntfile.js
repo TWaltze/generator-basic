@@ -23,7 +23,7 @@ module.exports = function (grunt) {
         watch: {
             js: {
                 files: ['<%= config.app %>/js/**/*.js'],
-                tasks: ['jshint'],
+                tasks: ['jshint', 'jscs'],
                 options: {
                     livereload: true
                 }
@@ -50,6 +50,7 @@ module.exports = function (grunt) {
                 files: [
                     '<%= config.build %>/**/*.html',
                     '<%= config.build %>/styles/**/*.css',
+                    '<%= config.build %>/js/**/*.js',
                     '<%= config.build %>/images/**/*'
                 ]
             }
@@ -83,6 +84,17 @@ module.exports = function (grunt) {
             ]
         },
 
+        jscs: {
+            options: {
+                config: '.jscsrc'
+            },
+            all: [
+                'Gruntfile.js',
+                '<%= config.app %>/js/**/*.js',
+                '!<%= config.app %>/js/vendor/*'
+            ]
+        },
+
         uglify: {
             dist: {
                 files: {
@@ -99,12 +111,9 @@ module.exports = function (grunt) {
                 sourceMap: true
             },
             dist: {
-                options: {
-                    cleancss: true
-                },
                 files: {
-					'<%= config.dist %>/styles/main.css': '<%= config.app %>/styles/less/styles.less'
-				}
+                    '<%= config.dist %>/styles/main.css': '<%= config.app %>/styles/less/styles.less'
+                }
             },
             build: {
                 files: {
@@ -137,6 +146,17 @@ module.exports = function (grunt) {
         },
 
         // The following *-min tasks produce minified files in the dist folder
+        cssmin: {
+            dist: {
+                files: [{
+                    expand: true,
+                    cwd: '<%= config.dist %>/styles/',
+                    src: '**/*.css',
+                    dest: '<%= config.dist %>/styles/'
+                }]
+            }
+        },
+
         imagemin: {
             dist: {
                 files: [{
@@ -159,6 +179,7 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '**/*.html',
+                        'js/**/*.*',
                         'styles/fonts/**/*.*'
                     ]
                 }]
@@ -174,6 +195,7 @@ module.exports = function (grunt) {
                         'images/**/*.webp',
                         '**/*.html',
                         '**/*.js',
+                        'js/**/*.*',
                         'styles/fonts/**/*.*'
                     ]
                 }]
@@ -232,6 +254,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'concurrent:dist',
         'autoprefixer',
+        'cssmin',
         'copy:dist'
     ]);
 };
