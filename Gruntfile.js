@@ -19,7 +19,7 @@ module.exports = function(grunt) {
         watch: {
             js: {
                 files: ['<%= dirs.app %>/js/**/*.js'],
-                tasks: ['jshint', 'jscs', 'newer:copy:dev'],
+                tasks: ['check-js', 'newer:copy:dev'],
                 options: {
                     livereload: true
                 }
@@ -29,7 +29,7 @@ module.exports = function(grunt) {
             },
             less: {
                 files: ['<%= dirs.app %>/styles/**/*.{less,css}'],
-                tasks: ['less:dev', 'autoprefixer:dev']
+                tasks: ['make-css:dev']
             },
             html: {
                 files: ['<%= dirs.app %>/**/*.html'],
@@ -40,10 +40,7 @@ module.exports = function(grunt) {
                     livereload: '<%= connect.options.livereload %>'
                 },
                 files: [
-                    '<%= dirs.dev %>/**/*.html',
-                    '<%= dirs.dev %>/styles/**/*.css',
-                    '<%= dirs.dev %>/js/**/*.js',
-                    '<%= dirs.dev %>/img/**/*'
+                    '<%= dirs.dev %>/**/*.*',
                 ]
             }
         },
@@ -71,8 +68,7 @@ module.exports = function(grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= dirs.app %>/js/**/*.js',
-                '!<%= dirs.app %>/js/vendor/*'
+                '<%= dirs.app %>/js/**/*.js'
             ]
         },
 
@@ -82,8 +78,7 @@ module.exports = function(grunt) {
             },
             all: [
                 'Gruntfile.js',
-                '<%= dirs.app %>/js/**/*.js',
-                '!<%= dirs.app %>/js/vendor/*'
+                '<%= dirs.app %>/js/**/*.js'
             ]
         },
 
@@ -109,10 +104,10 @@ module.exports = function(grunt) {
                 }
             },
             dev: {
-                files: {
-                    '<%= dirs.dev %>/styles/main.css':
-                        '<%= dirs.app %>/styles/less/styles.less'
-                }
+                files: [{
+                    src: '<%= dirs.app %>/styles/less/styles.less',
+                    dest: '<%= dirs.dev %>/styles/main.css'
+                }]
             }
         },
 
@@ -167,6 +162,25 @@ module.exports = function(grunt) {
             }
         },
 
+        wiredep: {
+            dist: {
+                directory: '<%= dirs.dist %>/vendors',
+                src: [
+                    '<%= dirs.dist %>/index.html',
+                ],
+                options: {
+                }
+            },
+            dev: {
+                directory: '<%= dirs.dev %>/vendors',
+                src: [
+                    '<%= dirs.dev %>/index.html',
+                ],
+                options: {
+                }
+            }
+        },
+
         // Copies remaining files to places other tasks can use
         copy: {
             dist: {
@@ -181,6 +195,14 @@ module.exports = function(grunt) {
                         'js/**/*.*',
                         'styles/fonts/**/*.*'
                     ]
+                }, {
+                    src: 'vendors/**/*.*',
+                    dest: '<%= dirs.dist %>/'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    src: 'vendors/font-awesome/fonts/**/*.*',
+                    dest: '<%= dirs.dist %>/fonts/'
                 }]
             },
             dev: {
@@ -196,6 +218,14 @@ module.exports = function(grunt) {
                         'styles/fonts/**/*.*',
                         'img/**/*.{gif,jpeg,jpg,png}'
                     ]
+                }, {
+                    src: 'vendors/**/*.*',
+                    dest: '<%= dirs.dev %>/'
+                }, {
+                    expand: true,
+                    flatten: true,
+                    src: 'vendors/font-awesome/fonts/**/*.*',
+                    dest: '<%= dirs.dev %>/fonts/'
                 }]
             }
         },
@@ -203,11 +233,13 @@ module.exports = function(grunt) {
         // Run some tasks in parallel to speed up build process
         concurrent: {
             dev: [
-                'less:dev',
+                'check-js',
+                'make-css:dev',
                 'copy:dev'
             ],
             dist: [
-                'less:dist',
+                'check-js',
+                'make-css:dist',
                 'imagemin',
                 'copy:dist'
             ]
@@ -234,12 +266,28 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('make-css:dev', [
+        'less:dev',
+        'autoprefixer:dev'
+    ]);
+
+    grunt.registerTask('make-css:dist', [
+        'less:dist',
+        'autoprefixer:dist',
+        'cssmin:dist'
+    ]);
+
+    grunt.registerTask('check-js', [
+        'jshint',
+        'jscs'
+    ]);
+
     grunt.registerTask('dev', function(target) {
         if (target !== 'watch') {
             grunt.task.run([
                 'clean:dev',
                 'concurrent:dev',
-                'autoprefixer'
+                'wiredep:dev',
             ]);
         }
 
@@ -252,7 +300,6 @@ module.exports = function(grunt) {
     grunt.registerTask('dist', [
         'clean:dist',
         'concurrent:dist',
-        'autoprefixer',
-        'cssmin'
+        'wiredep:dist',
     ]);
 };
