@@ -15,7 +15,7 @@
 	border-bottom-width: 1px;
 
 	display: inline-block;
-	padding: .6em 1em;
+	padding: 0.5em 0.7em;
 	margin: 0;
 
 	/* mobile safari fix */
@@ -24,9 +24,19 @@
 
 	.newColoredButton(@accent);
 
+	&__icon {
+		&:first-child {
+			margin-right: .4em;
+		}
+
+		&:last-child {
+			margin-left: .4em;
+		}
+	}
+
 	&-size {
 		&--small {
-
+			font-size: .7rem;
 		}
 
 		&--medium {
@@ -34,7 +44,7 @@
 		}
 
 		&--large {
-
+			font-size: 1.5rem;
 		}
 
 		&--fullWidth {
@@ -42,60 +52,60 @@
 		}
 	}
 
-	&-color {
-		&--twitter {
-			@baseColor: #00ACED;
+	&--twitter {
+		@baseColor: #00ACED;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--facebook {
-			letter-spacing: -.1em;
+	&--facebook {
+		letter-spacing: -.1em;
 
-			@baseColor: #3B5999;
+		@baseColor: #3B5999;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--dark {
-			@baseColor: darken(@accent, 5%);
+	&--dark {
+		@baseColor: darken(@accent, 5%);
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--blue {
-			@baseColor: @blue;
+	&--blue {
+		@baseColor: @blue;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--green {
-			@baseColor: @green;
+	&--green {
+		@baseColor: @green;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--red {
-			@baseColor: @red;
+	&--red {
+		@baseColor: @red;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--orange {
-			@baseColor: @orange;
+	&--orange {
+		@baseColor: @orange;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
+	}
 
-		&--yellow {
-			@baseColor: @yellow;
+	&--yellow {
+		@baseColor: @yellow;
 
-			.newColoredButton(@baseColor);
-		}
+		.newColoredButton(@baseColor);
 	}
 }
 
 .newColoredButton(@baseColor) {
+	&:extend(.button);
+
 	background: @baseColor;
 	border-color: darken(@baseColor, 15%);
 
@@ -103,9 +113,13 @@
 		background: darken(@baseColor, 5%);
 	}
 
-	&:active,
+	&:active {
+		background: darken(@baseColor, 10%);
+	}
+
 	&:disabled,
 	&.disabled {
-		background: darken(@baseColor, 10%);
+		background: lighten(@baseColor, 20%);
+		cursor: default;
 	}
 }
