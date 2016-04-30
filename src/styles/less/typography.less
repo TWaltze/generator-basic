@@ -2,6 +2,8 @@
 @fontFamily: 'Open Sans', Helvetica, sans-serif;
 @fontColor: #333;
 @fontSize: 14px;
+@fontSize-small: 0.8rem;
+@fontSize-large: 1.5rem;
 
 html,
 button,
@@ -60,34 +62,52 @@ a {
     }
 }
 
-.text-align {
-    &--left {
-        text-align: left;
-    }
+.font {
+	&-size {
+		&--small {
+			font-size: @fontSize-small;
+		}
 
-    &--center {
-        text-align: center;
-    }
+		&--large {
+			font-size: @fontSize-large;
+		}
+	}
 
-    &--right {
-        text-align: right;
-    }
-}
+	&-color {
+		&--error {
+			color: @red;
+		}
+	}
 
-.font-weight {
-    &--light {
-        font-weight: 300;
-    }
+	&-align {
+		&--center {
+			text-align: center;
+		}
 
-    &--normal {
-        font-weight: 400;
-    }
+        &--left {
+            text-align: left;
+        }
 
-    &--medium {
-        font-weight: 600;
-    }
+		&--right {
+			text-align: right;
+		}
+	}
 
-    &--bold {
-        font-weight: 700;
+    &-weight {
+        &--light {
+            font-weight: 300;
+        }
+
+        &--normal {
+            font-weight: 400;
+        }
+
+        &--medium {
+            font-weight: 600;
+        }
+
+        &--bold {
+            font-weight: 700;
+        }
     }
 }
