@@ -2,7 +2,7 @@
 	cursor: pointer;
 
 	color: #fff;
-	line-height: normal;
+	line-height: 1;
 	font-size: 1em;
 	font-family: @fontFamily;
 	font-weight: 300;
@@ -11,6 +11,8 @@
 
 	outline: none;
 	border: none;
+	border-top-style: solid;
+	border-top-width: 1px;
 	border-bottom-style: solid;
 	border-bottom-width: 1px;
 
@@ -46,15 +48,15 @@
 
 	&-size {
 		&--small {
-			font-size: .7rem;
+			font-size: @fontSize-small;
 		}
 
 		&--medium {
-			font-size: 1.2rem;
+			font-size: @fontSize-medium;
 		}
 
 		&--large {
-			font-size: 1.5rem;
+			font-size: @fontSize-large;
 		}
 
 		&--fullWidth {
@@ -117,18 +119,22 @@
 	&:extend(.button);
 
 	background: @baseColor;
-	border-color: darken(@baseColor, 15%);
+	border-top-color: @baseColor;
+	border-bottom-color: darken(@baseColor, 15%);
 
 	&:hover {
+		border-top-color: darken(@baseColor, 5%);
 		background: darken(@baseColor, 5%);
 	}
 
 	&:active {
+		border-top-color: darken(@baseColor, 10%);
 		background: darken(@baseColor, 10%);
 	}
 
 	&:disabled,
 	&.disabled {
+		border-top-color: lighten(@baseColor, 20%);
 		background: lighten(@baseColor, 20%);
 		cursor: default;
 	}
